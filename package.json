@@ -1,0 +1,19 @@
+{
+  "name": "sbhacks",
+  "version": "1.0.0",
+  "description": "Find flight information for delay",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hp",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.13",
+    "wolfram": "^0.3.2",
+    "wolfram-alpha": "^0.4.0"
+  }
+}
