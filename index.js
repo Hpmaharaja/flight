@@ -9,7 +9,17 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/View'));
-
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+   res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Cache-Control");
+   if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  } else {
+    return next();
+  }
+});
 
 /*
 mongoose.connect('mongodb://localhost/flightdata');
@@ -31,6 +41,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/getdelaytime', function (req, res) {
+	console.log(req.body);
 	wolfram.query(req.body.flight, function(err, result) {
     	if(err) {
     		res.status(400).json({ status: 400, msg: "Failure"});
@@ -40,12 +51,12 @@ app.post('/getdelaytime', function (req, res) {
 	});
 });
 
-app.get('/getflightinfo', function (req, res) {
+app.post('/getflightinfo', function (req, res, next) {
 	wolfram.query(req.body.flight, function(err, result) {
     	if(err) {
     		res.status(400).json({ status: 400, msg: "Failure"});
     	} else {
-			res.send(result);
+			res.status(200).json({ status: 200, msg: 'Success in retrieving flight data!', delay: result });
 		}
 	});
 });

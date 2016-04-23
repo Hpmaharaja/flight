@@ -1,7 +1,8 @@
 SB HACKS TRAVEL APP
 
 - *Flight Itenerary 
-- Calculate Flight Delay Prediction based on Previous flight time data (Wolfram Alpha)
 - Calculate delay based on weather (Wolfram Dev)
+- Calculate Flight Delay Prediction based on Previous flight time data (Wolfram Alpha)
 - Twitter sentiment on airline (Twitter)
 - 
+https://github.com/Hpmaharaja/flight.git
