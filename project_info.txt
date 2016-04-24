@@ -1,0 +1,16 @@
+flightHelp Project Information
+************************************************************************************************
+
+REST API CALLS
+- all calls start with ip address and port
+- e.g. http://10.202.255.233:3000/
+
+POST ('/getflightinfo')
+	-> Input => flight
+	-> Output => SUCCESS => { status: 200, msg: 'Success in retrieving flight data!', delay: resul }
+				 FAILED => { status: 400, msg: "Failure"}
+
+POST ('/departarrival')
+	-> Input => depart, arrival
+	-> Output => SUCCESS => { status: 200, msg: 'Success in POSTing departure and arrival locations!', wolfresp: result}
+				 FAILED => { status: 400, msg: "Failure"}

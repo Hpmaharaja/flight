@@ -8,6 +8,7 @@ var port = 3000;
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(express.static(__dirname + '/View'));
 app.use(function(req, res, next) {
    res.header("Access-Control-Allow-Origin", "*");
@@ -36,29 +37,56 @@ var Delay = mongoose.model('Delay', new Schema({
 	})); 
 */
 
+var info = [];
+var airlines = [];
+
 app.get('/', function (req, res) {
 	res.render('./index.html');
 });
 
-app.post('/getdelaytime', function (req, res) {
+app.post('/getflightinfo', function (req, res, next) {
+	console.log(info);
 	console.log(req.body);
-	wolfram.query(req.body.flight, function(err, result) {
-    	if(err) {
-    		res.status(400).json({ status: 400, msg: "Failure"});
+	wolfram.query(req.body.flight, function(err, resul) {
+    	if(!err) {
+    		res.status(200).json({ status: 200, msg: 'Success in retrieving flight data!', delay: resul });
     	} else {
-			res.status(200).json({ status: 200, msg: 'Success in retrieving flight data!', delay: result[2].subpods[0].value.split('\n')[0] });
+			res.status(400).json({ status: 400, msg: "Failure"});
 		}
 	});
 });
 
-app.post('/getflightinfo', function (req, res, next) {
-	wolfram.query(req.body.flight, function(err, result) {
-    	if(err) {
-    		res.status(400).json({ status: 400, msg: "Failure"});
+
+app.post('/departarrival', function (req, res) {
+	console.log("Proposed Route:");
+	console.log(req.body);
+	wolfram.query("Flights from " + req.body.depart + " to " + req.body.arrival, function(err, result) {
+    	if(!err) {
+    		info.push(result[3].subpods[0].value.split('\n'));
+			res.status(200).json({ status: 200, msg: 'Success in POSTing departure and arrival locations!', wolfresp: result[3].subpods[0].value.split('\n') });
     	} else {
-			res.status(200).json({ status: 200, msg: 'Success in retrieving flight data!', delay: result });
+    		res.status(400).json({ status: 400, msg: "Failure"});
 		}
+		console.log(info[0][0]);
 	});
+});
+
+app.post('/getdelayStats', function (req, res) {
+
+	for (var i=0; i < info[0].length; i++) {
+		var result = "";
+		for (var j=0; j < info[0][i].length; j++) {
+			if (info[0][i][j] != ' f') {
+	    		result += info[0][i][j];
+			} else {
+				break
+			}
+		}
+		airlines.push(result);
+	}
+	console.log(airlines);
+
+	res.status(200).json({ status: 200, msg: 'Success in receiving flight stats!', wolfresp: airlines});
 });
 
 app.listen(port, function () {

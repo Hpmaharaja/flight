@@ -5,32 +5,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </head>
 <body>
+
+	<h1>TEST CALL</h1>
 	<input type="text" id="flight" name="flight" placeholder="Input Flight and #"></input>
 	<input type="submit" id="submit"></input>
 
-	<h1>TEST CALL</h1>
-
-	<form action="http://10.202.255.233/getflightinfo" method="POST">
-		<input type="text" name="flight" placeholder="Input Flight and #"></input>
-		<input type="submit" id="submit"></input>
-	</form>
-
 	<div id="response"></div>
+	<div id="image"></div>
 </body>
+
+
+
 <script type="text/javascript">
 	$( document ).ready(function() {
         console.log( "document loaded" );
-        var data = { "flight" : "Southwest flight 276" };
-        console.log(JSON.stringify(data));
-		$.ajax({
-    		type: "POST",
-    		url: "/getdelaytime",
-    		contentType: 'application/json',
-    		data: JSON.stringify({ "flight" : "Southwest flight 276" }),
-    		success: function(r) {
-    			console.log(r);
-			}
-		});
 		
 
         $("#submit").click(function() {
@@ -41,14 +29,13 @@
 	        		contentType: 'application/json',
 	        		type: 'POST',
 	  				url: "/getdelaytime",
-	  				data: { "flight": "Southwest Airlines 276"},
+	  				data: JSON.stringify(data),
 	  				success: function(resp) {
-	  					alert('Made POST call!');
-	  					console.dir(JSON.stringify(resp));
+	  					console.dir(JSON.stringify(resp.delay[0].subpods[0].image));
 	  					$("#response").html('<p>' + resp.delay + '</p>');
 	  				} 
 				}).done(function() {
-	  				alert('hello');
+	  				
 				});
 			}, 10);
         });
