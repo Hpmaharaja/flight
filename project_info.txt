@@ -14,3 +14,7 @@ POST ('/departarrival')
 	-> Input => depart, arrival
 	-> Output => SUCCESS => { status: 200, msg: 'Success in POSTing departure and arrival locations!', wolfresp: result}
 				 FAILED => { status: 400, msg: "Failure"}
+
+POST ('/getdelayStats')
+	-> Input => NOTHING
+	-> Output => SUCCESS => { status: 200, msg: 'Success in receiving flight stats!', wolfresp: airlines}
