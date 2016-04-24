@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var wolfram = require('wolfram').createClient("6T3AG7-GX2VT7GWWU");
+var wolfram = require('wolfram').createClient("API_KEY");
 var app = express();
 var port = 3000;
 
