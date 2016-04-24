@@ -6,9 +6,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-	<link rel="stylesheet" href="./css/material-charts.css">
-	<script src="./js/material-charts.js"></script>
-
+	
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<style type="text/css">
@@ -100,11 +98,11 @@
 	  							console.dir(JSON.stringify(resp));
 	  							var count = 0;
 	  							var html = "";
-	  							html += "<tr><td>" + resp.img_delays[2] + "</td><td>" + resp.img_delays[4] + "</td><td>" + resp.img_delays[5] +"</td></tr>";
+	  							html += "<tr><td>" + resp.img_delays[8] + "</td><td>" + resp.img_delays[10] + "</td><td>" + resp.img_delays[11] +"</td></tr>";
 	  							$("#airline").append(html);
-	  							var n = "<tr><td>" + resp.img_delays[6] + "</td><td>" + resp.img_delays[8] + "</td><td>" + resp.img_delays[9] +"</td></tr>";
+	  							var n = "<tr><td>" + resp.img_delays[0] + "</td><td>" + resp.img_delays[2] + "</td><td>" + resp.img_delays[3] +"</td></tr>";
 	  							$("#airline").append(n);
-	  							var k = "<tr><td>" + resp.img_delays[10] + "</td><td>" + resp.img_delays[12] + "</td><td>" + resp.img_delays[13] +"</td></tr>";
+	  							var k = "<tr><td>" + resp.img_delays[4] + "</td><td>" + resp.img_delays[6] + "</td><td>" + resp.img_delays[7] +"</td></tr>";
 	  							$("#airline").append(k);
 	  							// $.each(resp.img_delays, function (index, item) {
 	  							// 	if (count === 0 && item.length > 5 && item.length < 60) {
