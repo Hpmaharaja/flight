@@ -1,0 +1,28 @@
+.airplane_name {
+	text-align: center;
+	font-size: 2em;
+	line-height: 7em;
+}
+
+.nav-wrapper {
+	text-align: center;
+}
+
+.row {
+	text-align: center;
+
+}
+
+input {
+	text-align: center;
+	
+}
+
+body {
+	background: #f9f7f6;
+	color: #404d5b;
+	font-weight: 500;
+	font-size: 1.05em;
+	font-family: 'Raleway', Arial, sans-serif;
+}
+
