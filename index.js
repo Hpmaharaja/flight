@@ -9,7 +9,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/View'));
+app.use(express.static(__dirname + '/public'));
 app.use(function(req, res, next) {
    res.header("Access-Control-Allow-Origin", "*");
    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -42,7 +42,7 @@ var airlines = [];
 var img_dly = [];
 
 app.get('/', function (req, res) {
-	res.render('./index.html');
+	res.render('index.html');
 });
 
 app.post('/getflightinfo', function (req, res, next) {
@@ -64,8 +64,13 @@ app.post('/departarrival', function (req, res) {
 	console.log(req.body);
 	wolfram.query("Flights from " + req.body.depart + " to " + req.body.arrival, function(err, result) {
     	if(!err) {
-    		info.push(result[3].subpods[0].value.split('\n'));
-			res.status(200).json({ status: 200, msg: 'Success in POSTing departure and arrival locations!', wolfresp: result[3].subpods[0].value.split('\n') });
+    		for ( i = 0; i < result.length; i++) {
+    			if (result[i].title === 'Scheduled flights for the next 24 hours') {
+    				info.push(result[i].subpods[0].value.split('\n'));
+    			}
+    		}
+    		console.log(info);
+			res.status(200).json({ status: 200, msg: 'Success in POSTing departure and arrival locations!', wolfresp: info });
 			console.log('SUCCESS');
     	} else {
     		res.status(400).json({ status: 400, msg: "Failure"});
@@ -90,7 +95,7 @@ app.post('/getAirlines', function (req, res) {
 		airlines.push(airline.trim());
 	}
 	console.log(airlines);
-	res.status(200).json({ status: 200, msg: 'Success in receiving flight stats!', wolfresp: airlines});
+	res.status(200).json({ status: 200, msg: 'Success in receiving flight stats!', airlines: airlines});
 	console.log('SUCCESS');
 });
 
@@ -100,18 +105,36 @@ app.post('/getDelays', function (req, res) {
 	console.log(airlines);
 	for (var i=0; i < airlines.length; i++) {
 		console.log(airlines[i]);
-		wolfram.query(airlines[i], function(err, result) {
-    		if(!err) {
-    			console.log(result);
-    			img_dly.push(result);
-    		} else {
-				res.status(400).json({ status: 400, msg: "Failure"});
-			}
-		});
+			wolfram.query(airlines[i], function(err, result) {
+	    		if(!err) {
+	    			img_dly.push(result);
+	    		} else {
+					res.status(400).json({ status: 400, msg: "Failure"});
+				}
+			});
 	}
-	console.log(img_dly);
-	res.status(200).json({ status: 200, msg: 'Success in retrieving airline logo and delays!', img_delays: img_dly });
-	console.log('SUCCESS');
+
+	var final_data = [];
+	setTimeout(function() {
+		for (var i = 0; i < img_dly.length; i++) {
+			if (img_dly[i]) { 
+				for (var j = 0; j < img_dly[i].length; j++) {
+					if (img_dly[i][j].title === 'Input interpretation') {
+						final_data.push(img_dly[i][j].subpods[0].value);
+						final_data.push(img_dly[i][j].subpods[0].image);
+					}
+					if (img_dly[i][j].title === 'On-time performance') {
+						final_data.push(img_dly[i][j].subpods[0].value.split('\n')[1].split('|')[1].trim().split(" ")[1]);
+						final_data.push(img_dly[i][j].subpods[0].value.split('\n')[1].split('|')[2].trim().split(" ")[1]);
+					} 
+				}
+			}
+		}
+	}, 10000);
+	setTimeout(function() {
+		res.status(200).json({ status: 200, msg: 'Success in retrieving airline logo and delays!', img_delays: final_data });
+		console.log('SUCCESS');
+	}, 15000);
 });
 
 

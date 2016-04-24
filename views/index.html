@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<link rel="stylesheet" href="./css/material-charts.css">
+	<script src="./js/material-charts.js"></script>
+
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<style type="text/css">
+	</style>
+</head>
+
+<body>
+
+
+	<nav>
+		<div class="nav-wrapper">
+		<a href="" class="brand-logo center">flightHelp</a>
+		<ul id="nav-mobile" class="right hide-on-med-and-down">
+  		</ul>
+		</div>
+    </nav>
+
+
+<div class="row">
+   <form class="col s12">
+     <div class="row">
+       <div class="input-field col s6">
+       		<input type="text" id="depart" name="depart" placeholder="Departing From:"></input>
+         	<label for="depart"></label>
+       </div>
+       <div class="input-field col s6">
+          <input type="text" id="arrival" name="arrival" placeholder="Arriving Destination"></input>
+          <label for="arrival"></label>
+          <a class="waves-effect waves-light btn" type="submit" id="submit">Start Exploring</a>
+       </div>
+      </div>
+    </form>
+</div>
+
+<table>
+        <thead>
+          <tr>
+              <th data-field="id">Airline Name</th>
+              <th data-field="name">Average Departure Delay (minutes)</th>
+              <th data-field="price">Average Arrival Delay (minutes)</th>
+          </tr>
+        </thead>
+
+        <tbody id="airline">
+        </tbody>
+      </table>
+
+
+	<div id="response"></div>
+	<div id="image"></div>
+
+	<div id="demo"></div>
+
+
+</body>
+
+
+<script type="text/javascript">
+	$( document ).ready(function() {
+        console.log( "document loaded" );
+		
+
+        $("#submit").click(function() {
+        	var data = { depart: $("#depart").val(), arrival: $("#arrival").val() };
+        	console.log(data);
+        	setTimeout(function () {
+	        	$.ajax({
+	        		contentType: 'application/json',
+	        		type: 'POST',
+	  				url: "/departarrival",
+	  				data: JSON.stringify(data),
+	  				success: function(resp) {
+	  					console.dir(JSON.stringify(resp));
+	  				} 
+				}).done(function() {
+	  				$.ajax({
+	  					contentType: 'application/json',
+	        			type: 'POST',
+	  					url: "/getAirlines",
+	  					success: function(resp) {
+	  						console.dir(JSON.stringify(resp));
+	  					} 
+	  				}).done(function() {
+	  					$.ajax({
+	  						contentType: 'application/json',
+	        				type: 'POST',
+	  						url: "/getDelays",
+	  						success: function(resp) {
+	  							console.dir(JSON.stringify(resp));
+	  							var count = 0;
+	  							var html = "";
+	  							html += "<tr><td>" + resp.img_delays[2] + "</td><td>" + resp.img_delays[4] + "</td><td>" + resp.img_delays[5] +"</td></tr>";
+	  							$("#airline").append(html);
+	  							var n = "<tr><td>" + resp.img_delays[6] + "</td><td>" + resp.img_delays[8] + "</td><td>" + resp.img_delays[9] +"</td></tr>";
+	  							$("#airline").append(n);
+	  							var k = "<tr><td>" + resp.img_delays[10] + "</td><td>" + resp.img_delays[12] + "</td><td>" + resp.img_delays[13] +"</td></tr>";
+	  							$("#airline").append(k);
+	  							// $.each(resp.img_delays, function (index, item) {
+	  							// 	if (count === 0 && item.length > 5 && item.length < 60) {
+	  							// 		count += 1
+	  							// 		html += '<tr><td>' + item + '</td>';
+	  							// 	}
+	  							// 	if (count === 1 || count === 2 && item.length < 5) {
+	  							// 		count += 1;
+	  							// 		html += '<td>' + item + '</td>';
+	  							// 	}
+	  							// 	if (count === 3) {
+	  							// 		html += '</tr>';
+	  							// 		$("#airline").append(html);
+	  							// 		html = "";
+	  							// 		count = 0;
+	  							// 	}
+	  							// });
+	  						} 
+	  					});
+	  				});
+	  			});
+			}, 10);
+        });
+
+ 		var barchart = {
+    		"datasets": {
+	      		"values": [5, 10, 30, 50, 20],
+	      		"labels": [
+	        		"JavaScript",
+	        		"Swift",
+	        		"Object-C",
+	        		"C++",
+	        		"Python"
+	      		],
+	      		"color": "blue"
+    		}
+    // more options here
+		};
+		MaterialCharts.bar("#demo", barchart);
+
+    
+  
+    });
+
+   
+
+</script>
+</html>
