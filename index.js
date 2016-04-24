@@ -102,6 +102,7 @@ app.post('/getDelays', function (req, res) {
 		console.log(airlines[i]);
 		wolfram.query(airlines[i], function(err, result) {
     		if(!err) {
+    			console.log(result);
     			img_dly.push(result);
     		} else {
 				res.status(400).json({ status: 400, msg: "Failure"});

@@ -19,4 +19,11 @@ POST ('/departarrival')
 POST ('/getAirlines')
 	-> Input => NOTHING
 	-> Output => SUCCESS => { status: 200, msg: 'Success in receiving flight stats!', wolfresp: airlines}
+			     FAILED => { status: 400, msg: "Failure"}
 	-> returns a list of all the airlines departing for specified route
+
+POST ('/getDelays')
+	-> Input => NOTHING
+	-> Output => SUCCESS { status: 200, msg: 'Success in retrieving airline logo and delays!', img_delays: img_dly }
+				 FAILED => { status: 400, msg: "Failure"}
+	-> returns a list of logos and average domestic delays (departure and arrival)
